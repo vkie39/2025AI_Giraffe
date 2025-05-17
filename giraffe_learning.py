@@ -35,6 +35,10 @@ pip install torch==1.13.1 torchvision==0.14.1 --extra-index-url https://download
 
 # StyleGAN3 의존성
 pip install click requests tqdm pyspng imageio-ffmpeg ninja psutil scipy
+
+# stylegan3는 numpy 구버전 사용
+pip install numpy==1.26.4
+
 '''
 
 
