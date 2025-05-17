@@ -35,7 +35,7 @@ def is_blurry(image, threshold=100.0):
     fm = cv2.Laplacian(gray, cv2.CV_64F).var()
     return fm < threshold # variance가 threshold보다 작으면 흐린 이미지로 판단
 
-input4blur = 'input_images'        # 원본 이미지 폴더
+input4blur = 'after_prep_img'        # 원본 이미지 폴더
 output4blur = 'filtered_images'    # 선명한 이미지 저장 폴더
 blurry_folder = 'blurry_images'      # 흐린 이미지 저장 폴더
 
@@ -43,7 +43,7 @@ blurry_folder = 'blurry_images'      # 흐린 이미지 저장 폴더
 os.makedirs(output4blur, exist_ok=True)
 os.makedirs(output4blur, exist_ok=True)
 
-threshold = 100.0  # 블러 판단 기준 (일반적으로 50~150 사이로 조정)
+threshold = 150.0  # 블러 판단 기준 (일반적으로 50~150 사이로 조정)
 
 
 for filename in os.listdir(input4blur):
