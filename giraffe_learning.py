@@ -1,3 +1,33 @@
+# vscode 에서 실행하는 방법
+# 1. venv 설정하고 venv로 powershell 실행하기
+# 2. 필요한 라이브러리 깔기
+# 3. stylegan3 clone하고 cd stylegan3
+# 4. 사용할 이미지 폴더 리사이징, 전처리 후 zip으로 압축
+# 5. !python train.py \
+#  --outdir=training-runs \
+#  --cfg=stylegan3-t \
+#  --data=/content/my_dataset.zip \
+#  --gpus=1 \
+#  --batch=4 \
+#  --gamma=8.2 \
+#  --mirror=1 \
+#  --aug=noaug \
+#  --snap=10 \
+#  --kimg=200 \
+#--metrics=none
+
+
+
+
+
+
+
+
+
+
+
+
+
 '''
 !git clone https://github.com/NVlabs/stylegan3.git
 
