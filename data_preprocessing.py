@@ -202,7 +202,15 @@ for filename in os.listdir(input4crop):
 
             # 정렬된 이미지에서 얼굴 영역 추출
             x, y, w, h = rect.left(), rect.top(), rect.width(), rect.height()
-            cropped_face = aligned_face[y:y+h, x:x+w]
+
+            # 사이즈 조정: 상하좌우로 20픽셀 여유를 줌
+            margin = 20
+            x1 = max(x - margin, 0)
+            y1 = max(y - margin, 0)
+            x2 = min(x + w + margin, aligned_face.shape[1])
+            y2 = min(y + h + margin, aligned_face.shape[0])
+
+            cropped_face = aligned_face[y1:y2, x1:x2]
 
             # 크롭된 얼굴 이미지 저장
             save_path = os.path.join(output4crop, filename)
