@@ -15,7 +15,27 @@
 #  --snap=10 \
 #  --kimg=200 \
 #--metrics=none
+'''
+git clone https://github.com/NVlabs/stylegan3.git
+cd stylegan3
 
+# 가상환경 생성
+python -m venv venv
+
+# 실행 정책 변경 (최초 1회만)
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+# 가상환경 활성화
+.\venv\Scripts\Activate.ps1
+
+pip install --upgrade pip setuptools
+
+# PyTorch (CUDA 11.6 기준. NVIDIA GPU 필수)
+pip install torch==1.13.1 torchvision==0.14.1 --extra-index-url https://download.pytorch.org/whl/cu116
+
+# StyleGAN3 의존성
+pip install click requests tqdm pyspng imageio-ffmpeg ninja psutil scipy
+'''
 
 
 
