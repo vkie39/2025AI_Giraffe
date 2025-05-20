@@ -5,8 +5,8 @@ import cv2
 import shutil
 
 #이미지 화질 고정
-input4pixel = '../giraffe_photo'
-output4pixel = '../after_prep_img'
+input4pixel = 'merged_output'
+output4pixel = 'after_prep_img'
 
 os.makedirs(output4pixel, exist_ok=True)
 
