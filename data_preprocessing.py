@@ -8,7 +8,7 @@ import dlib
 import numpy as np
 
 #이미지 화질 고정
-input4pixel = 'human_face'  # 원본 이미지 폴더
+input4pixel = 'merged_output'  # 원본 이미지 폴더
 output4pixel = 'after_prep_img'
 
 os.makedirs(output4pixel, exist_ok=True)
@@ -72,7 +72,7 @@ for filename in os.listdir(input4blur):
 print("블러 처리 완료!")
 
 #사람 얼굴 데이터셋
-
+'''
 # 측면 얼굴 제거 코드(양쪽 눈이 안 보이면 이미지 다른 폴더로 이동)
 input4EYE = 'filtered_images'  # 선명한 이미지 폴더
 output4EYE = 'cropped_faces'   # 크롭된 이미지 저장 폴더
@@ -219,3 +219,4 @@ for filename in os.listdir(input4crop):
 
 #기린 얼굴 데이터셋
 
+'''
