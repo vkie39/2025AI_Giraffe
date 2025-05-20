@@ -4,7 +4,7 @@ from PIL import Image
 import cv2
 import shutil
 
-import dlib
+#import dlib
 import numpy as np
 
 #이미지 화질 고정
@@ -44,13 +44,15 @@ blurry_folder = 'blurry_images'      # 흐린 이미지 저장 폴더
 
 # 출력 폴더가 없으면 생성
 os.makedirs(output4blur, exist_ok=True)
-os.makedirs(output4blur, exist_ok=True)
+os.makedirs(blurry_folder, exist_ok=True)
 
 # 대상 디렉터리가 존재하는지 확인하고, 없으면 생성
+#여기 오류나서 일단 주석 처리 함
+'''
 destination_dir = os.path.dirname(blurry_folder)
 if not os.path.exists(destination_dir):
     os.makedirs(destination_dir)
-
+'''
 threshold = 150.0  # 블러 판단 기준 (일반적으로 50~150 사이로 조정)
 
 
