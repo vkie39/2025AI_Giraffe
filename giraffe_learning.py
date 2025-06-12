@@ -59,24 +59,24 @@ from google.colab import drive
 drive.mount('/content/drive')
 %cd /content/stylegan3
 
-# ✅ Python 3.10 설치 (torchvision 0.14.1를 지원하는 python 버전을 설치하는 과정 )
+# Python 3.10 설치 (torchvision 0.14.1를 지원하는 python 버전을 설치하는 과정 )
 !sudo apt-get update
 !sudo apt-get install python3.10 python3.10-distutils python3.10-dev -y
 
-# ✅ Python 3.10을 기본 python3으로 설정
+# Python 3.10을 기본 python3으로 설정
 !sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1
 !sudo update-alternatives --config python3
 
-# ✅ get-pip.py를 정확한 주소에서 다운로드
+# get-pip.py를 정확한 주소에서 다운로드
 !curl -O https://bootstrap.pypa.io/get-pip.py
 
-# ✅ Python 3.10으로 pip 설치
+# Python 3.10으로 pip 설치
 !python3 get-pip.py
 
-# ✅ pip 업그레이드 (선택)
+# pip 업그레이드 (선택)
 !python3 -m pip install --upgrade pip setuptools
 
-# ✅ PyTorch 1.13.1 + torchvision 0.14.1 (CUDA 11.6)
+# PyTorch 1.13.1 + torchvision 0.14.1 (CUDA 11.6)
 !pip install torch==1.13.1 torchvision==0.14.1 --extra-index-url https://download.pytorch.org/whl/cu116
 
 

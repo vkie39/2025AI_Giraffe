@@ -9,6 +9,6 @@ def count_files(folder_path):
     return sum(os.path.isfile(os.path.join(folder_path, f)) for f in os.listdir(folder_path))
 
 # 세고 싶은 폴더 여기에 적어!!!!!!!
-folder = 'after_prep_img'
+folder = 'filtered_images'
 file_count = count_files(folder)
 print(f"'{folder}' 폴더에 있는 파일 개수: {file_count}개")
