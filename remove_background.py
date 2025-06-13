@@ -3,7 +3,7 @@ from PIL import Image #pip install Image
 from rembg import remove #pip install pillow imagehash
                          #pip install onnxruntime
 
-def process_images(input_dir='giraffe0612_resized', output_dir='after_prep_img_clean'):
+def process_images(input_dir='human_face', output_dir='after_rmbackground_humanFace'):
     os.makedirs(output_dir, exist_ok=True)
     image_extensions = ('.jpg', '.jpeg', '.png')
 
