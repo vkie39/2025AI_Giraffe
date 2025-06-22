@@ -3,6 +3,11 @@ import mediapipe as mp
 import numpy as np
 import json
 
+# === 파일 경로 설정 ===
+HUMAN_IMAGE_PATH = 'ham.jpg'
+GIRAFFE_IMAGE_PATH = 'g_mask/giraffe.jpg'
+GIRAFFE_EYE_JSON_PATH = 'g_mask/giraffe_eye_points.json'
+
 # === 눈 추출 함수 (경계 부드럽게) ===
 def get_expanded_eye(img, landmarks, eye_idx, preserve_idx, expand_ratio=1.1):
     h, w = img.shape[:2]
@@ -120,7 +125,7 @@ RIGHT_BROW_IDX = [336, 296, 334, 293, 300]
 
 
 # === 사람 얼굴 분석 ===
-img_human = cv2.imread('ham.jpg')
+img_human = cv2.imread(HUMAN_IMAGE_PATH)
 img_rgb = cv2.cvtColor(img_human, cv2.COLOR_BGR2RGB)
 results = face_mesh.process(img_rgb)
 if not results.multi_face_landmarks:
@@ -136,8 +141,8 @@ right_brow_img, right_brow_center = get_eyebrow_patch(img_human, face_landmarks.
 
 
 # === 기린 이미지 및 붙일 좌표 로드 ===
-img_giraffe = cv2.imread('giraffe.jpg')
-with open("giraffe_eye_points.json", "r") as f:
+img_giraffe = cv2.imread(GIRAFFE_IMAGE_PATH)
+with open(GIRAFFE_EYE_JSON_PATH, "r") as f:
     giraffe_eye_points = json.load(f)
 
 if len(giraffe_eye_points) != 2:
