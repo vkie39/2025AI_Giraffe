@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기린 합성 사진 꾸미기 - 업로드</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 30px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #333;
+            font-size: 2.2em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header p {
+            margin-top: 10px;
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .upload-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .upload-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 80px rgba(0,0,0,0.15);
+        }
+
+        .upload-area {
+            border: 3px dashed #ddd;
+            border-radius: 15px;
+            padding: 60px 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .upload-area:hover::before {
+            left: 100%;
+        }
+
+        .upload-area:hover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            transform: scale(1.02);
+        }
+
+        .upload-area.dragover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #e8f0ff 0%, #f0f8ff 100%);
+            transform: scale(1.05);
+        }
+
+        .upload-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            color: #667eea;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .upload-text {
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .upload-subtext {
+            color: #666;
+            font-size: 1em;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            margin: 10px;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .progress {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 8px;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .uploaded-images {
+            margin-top: 40px;
+            display: none;
+        }
+
+        .uploaded-images h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .images-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .image-item {
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .image-actions {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        .btn-edit {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .btn-delete {
+            background: linear-gradient(45deg, #dc3545, #e74c3c);
+            color: white;
+        }
+
+        .btn-small:hover {
+            transform: scale(1.05);
+        }
+
+        .alert {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .alert-success {
+            background: linear-gradient(45deg, #d4edda, #c3e6cb);
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: linear-gradient(45deg, #f8d7da, #f5c6cb);
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .features {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .features h4 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .features ul {
+            color: #666;
+            line-height: 1.8;
+            list-style: none;
+            padding: 0;
+        }
+
+        .features li {
+            padding: 5px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .features li::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            .upload-card {
+                padding: 30px 20px;
+                margin: 0 10px;
+            }
+
+            .upload-area {
+                padding: 40px 20px;
+            }
+
+            .upload-icon {
+                font-size: 3.5em;
+            }
+
+            .upload-text {
+                font-size: 1.2em;
+            }
+
+            .images-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🦒 기린 합성 사진 꾸미기</h1>
+        <p>사진을 업로드하고 기린과 함께 멋진 합성 사진을 만들어보세요!</p>
+    </div>
+
+    <div class="container">
+        <div class="upload-card">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📷</div>
+                <div class="upload-text">사진을 업로드하세요</div>
+                <div class="upload-subtext">
+                    클릭하거나 파일을 드래그해서 업로드하세요<br>
+                    JPG, PNG, GIF, WebP 파일 지원 (최대 5MB)
+                </div>
+                <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                    📁 파일 선택
+                </button>
+                <input type="file" id="fileInput" class="file-input" accept="image/*" multiple>
+            </div>
+
+            <div class="progress" id="progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">업로드 중...</div>
+            </div>
+
+            <div class="alert" id="alert"></div>
+
+            <div class="features">
+                <h4>🎨 주요 기능</h4>
+                <ul>
+                    <li>간편한 드래그 앤 드롭 업로드</li>
+                    <li>기린과 자연스러운 합성</li>
+                    <li>다양한 꽃, 액세서리 장식</li>
+                    <li>실시간 미리보기</li>
+                    <li>고화질 이미지 다운로드</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="uploaded-images" id="uploadedImages">
+            <h3>📁 업로드된 이미지</h3>
+            <div class="images-grid" id="imagesGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const progress = document.getElementById('progress');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const alert = document.getElementById('alert');
+        const uploadedImages = document.getElementById('uploadedImages');
+        const imagesGrid = document.getElementById('imagesGrid');
+
+        // 드래그 앤 드롭 이벤트
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        uploadArea.addEventListener('drop', handleDrop, false);
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function highlight(e) {
+            uploadArea.classList.add('dragover');
+        }
+
+        function unhighlight(e) {
+            uploadArea.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        // 파일 입력 변경 이벤트
+        fileInput.addEventListener('change', function(e) {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            Array.from(files).forEach(uploadFile);
+        }
+
+        function uploadFile(file) {
+            if (!file.type.startsWith('image/')) {
+                showAlert('이미지 파일만 업로드 가능합니다.', 'error');
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                showAlert('파일 크기는 5MB를 초과할 수 없습니다.', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            // 진행률 표시
+            progress.style.display = 'block';
+            progressFill.style.width = '0%';
+            progressText.textContent = '업로드 중...';
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                progress.style.display = 'none';
+                
+                if (data.success) {
+                    showAlert(`'${data.originalName}' 업로드 완료!`, 'success');
+                    
+                    // 편집기로 이동 옵션 제공
+                    setTimeout(() => {
+                        if (confirm('업로드가 완료되었습니다. 편집기로 이동하시겠습니까?')) {
+                            window.location.href = data.editorUrl;
+                        } else {
+                            loadUploadedImages();
+                        }
+                    }, 1000);
+                } else {
+                    showAlert(data.error || '업로드 중 오류가 발생했습니다.', 'error');
+                }
+            })
+            .catch(error => {
+                progress.style.display = 'none';
+                console.error('Upload error:', error);
+                showAlert('업로드 중 오류가 발생했습니다.', 'error');
+            });
+
+            // 가짜 진행률 애니메이션
+            let progressValue = 0;
+            const progressInterval = setInterval(() => {
+                progressValue += Math.random() * 15;
+                if (progressValue > 90) progressValue = 90;
+                progressFill.style.width = progressValue + '%';
+                
+                if (progressValue >= 90) {
+                    clearInterval(progressInterval);
+                }
+            }, 200);
+        }
+
+        function showAlert(message, type) {
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
+            
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 5000);
+        }
+
+        //function loadUploadedImages() {
+        //    fetch('/api/images')
+        //    .then(response => response.json())
+        //    .then(images => {
+        //        if (images.length > 0) {
+        //            displayImages(images);
+        //            uploadedImages.style.display = 'block';
+        //        }
+        //    })
+        //    .catch(error => {
+        //        console.error('Failed to load images:', error);
+        //    });
+        //}
+
+        function displayImages(images) {
+            imagesGrid.innerHTML = '';
+            
+            images.forEach(image => {
+                const imageItem = document.createElement('div');
+                imageItem.className = 'image-item';
+                
+                imageItem.innerHTML = `
+                    <img src="${image.path}" alt="${image.filename}">
+                    <div class="image-actions">
+                        <button class="btn-small btn-edit" onclick="editImage('${image.filename}')">편집</button>
+                        <button class="btn-small btn-delete" onclick="deleteImage('${image.filename}')">삭제</button>
+                    </div>
+                `;
+                
+                imagesGrid.appendChild(imageItem);
+            });
+        }
+
+        function editImage(filename) {
+            window.location.href = `/editor/${filename}`;
+        }
+
+        function deleteImage(filename) {
+            if (!confirm('정말로 이 이미지를 삭제하시겠습니까?')) {
+                return;
+            }
+
+            fetch(`/api/images/${filename}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('이미지가 삭제되었습니다.', 'success');
+                    loadUploadedImages();
+                } else {
+                    showAlert(data.error || '삭제 중 오류가 발생했습니다.', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Delete error:', error);
+                showAlert('삭제 중 오류가 발생했습니다.', 'error');
+            });
+        }
+
+        // 페이지 로드 시 기존 이미지 불러오기
+        window.addEventListener('load', loadUploadedImages);
+    </script>
+</body>
+</html>
